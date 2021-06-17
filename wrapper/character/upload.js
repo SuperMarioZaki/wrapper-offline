@@ -11,10 +11,10 @@ module.exports = function (req, res, url) {
 		parse.unpackCharXml(buffer, numId);
 		fs.unlinkSync(path);
 		res.statusCode = 302;
-		const xml = buffer.toString();
-		const tIDbeg = xml.IndexOf('" theme_id="') + 12;
-		const tIDend = xml.IndexOf('" "');
-		const themeId = xml.subarray(beg, end);
+		const xml = Buffer(buffer);
+		const tIDbeg = xml.indexOf('" theme_id="') + 12;
+		const tIDend = xml.indexOf('" "');
+		const themeId = xml.subarray(beg, end).toString();
 		const url = `/cc?themeId=${themeId}&original_asset_id=c-${numId}`
 		res.setHeader('Location', url);
 		res.end();

@@ -14,7 +14,7 @@ module.exports = function (req, res, url) {
 		const xml = Buffer(buffer);
 		const tIDbeg = xml.indexOf('" theme_id="') + 12;
 		const tIDend = xml.indexOf('" "');
-		const themeId = xml.subarray(beg, end).toString();
+		const themeId = xml.subarray(tIDbeg, tIDend).toString();
 		const url = `/cc?themeId=${themeId}&original_asset_id=c-${numId}`
 		res.setHeader('Location', url);
 		res.end();

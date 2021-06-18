@@ -115,7 +115,7 @@ module.exports = function (req, res, url) {
 					storePath: process.env.STORE_URL + "/<store>",
 					isEmbed: 1,
 					ctc: "go",
-					ut: 30,
+					ut: 60,
 					bs: "default",
 					appCode: "go",
 					page: "",

@@ -287,16 +287,15 @@ if not exist "backups" goto nozip
 			goto zipprocess
 			)
 			:zipprocess
-			if not exist "backups\Restore points" ( mkdir "Restore points" )
 			set RESTORENAME=%date:~-4,4%-%date:~-7,2%-%date:~-10,2%T%time:~-11,2%-%time:~-8,2%-%time:~-5,2%Z.zip
 			cls
-			call 7za.exe a "backups\Restore points\%RESTORENAME%" "backups/Wrapper Content Backup" >nul
+			call 7za.exe a "!Restore points\%RESTORENAME%" "backups/Wrapper Content Backup" >nul
 			cls
-			call 7za.exe a "backups\Restore points\%RESTORENAME%" "backups/Imported Assets Backup" >nul
+			call 7za.exe a "!Restore points\%RESTORENAME%" "backups/Imported Assets Backup" >nul
 			cls
-			call 7za.exe a "backups\Restore points\%RESTORENAME%" "backups/Old Saved Folder Content" >nul
+			call 7za.exe a "!Restore points\%RESTORENAME%" "backups/Old Saved Folder Content" >nul
 			cls
-			call 7za.exe a "backups\Restore points\%RESTORENAME%" "backups/Old Import Folder Content" >nul
+			call 7za.exe a "!Restore points\%RESTORENAME%" "backups/Old Import Folder Content" >nul
 			cls
 			echo Restore point created.
 			echo Name: %RESTORENAME%

@@ -1,5 +1,5 @@
-:: W:O Video Exporting Script
-:: Author: xomdjl_#1337 (ytpmaker1000@gmail.com)
+:: Wrapper: Offline Video Exporting Script
+:: Original Author: xomdjl_#1337 (ytpmaker1000@gmail.com)
 :: License: MIT
 
 @echo off
@@ -12,6 +12,7 @@ if exist "..\patch.jpg" echo there's no videos to export if whoppers patched && 
 
 :restart
 :: Sets all variables to default, also makes it so that it can properly load config.bat
+set ERROR=n
 set OUTRO=1
 set TEMPPATH=%CD%\misc\temp\rewriteable.mp4
 set TEMPPATH2=%CD%\misc\temp\rewriteable.ts
@@ -23,7 +24,14 @@ set OUTRO149=%CD%\misc\Outro14by9.ts
 set VOLUME=1.5
 set OUTPUT_PATH=%CD%\renders
 set OUTPUT_FILENAME=Wrapper_Video_%date:~-4,4%-%date:~-7,2%-%date:~-10,2%T%time:~-11,2%-%time:~-8,2%-%time:~-5,2%Z
-set OUTPUT_FILE=%OUTPUT_FILENAME%.mp4
+set FILESUFFIX=mp4
+set VCODEC=h264
+set ACODEC=aac
+set CRF=17
+set RESOLUTIONOPTION=5
+set FORMATTYPE=1
+set ADDITIONAL="-crf %CRF%"
+set OUTPUT_FILE=%OUTPUT_FILENAME%.%FILESUFFIX%
 SETLOCAL ENABLEDELAYEDEXPANSION
 set SUBSCRIPT=y
 call config.bat
@@ -107,7 +115,7 @@ goto findMovieId
 
 
 :findMovieId
-if %FINDMOVIEIDCHOICE%==1 (
+if "%FINDMOVIEIDCHOICE%"=="1" (
 	echo:
 	echo Opening the _SAVED folder...
 	start explorer.exe "..\wrapper\_SAVED\"
@@ -119,7 +127,7 @@ if %FINDMOVIEIDCHOICE%==1 (
 	echo IN THE INPUT. MAKE SURE TO SHORTEN "movie" TO "m" TOO.
 	echo:
 	set /p MOVIEID= Movie ID: 
-) else if %FINDMOVIEIDCHOICE%==2 (
+) else if "%FINDMOVIEIDCHOICE%"=="2" (
 	echo:
 	echo Opening the video list in your default browser...
 	start http://localhost:%PORT%
@@ -128,7 +136,7 @@ if %FINDMOVIEIDCHOICE%==1 (
 	echo It should be in this format: m-%RANDOM%
 	echo:
 	set /p MOVIEID= Movie ID: 
-) else if %FINDMOVIEIDCHOICE%==3 (
+) else if "%FINDMOVIEIDCHOICE%"=="3" (
 	echo:
 	echo Opening the video list in the included Chromium...
 	start ungoogled-chromium\chromium.exe --allow-outdated-plugins --app="http://localhost:%PORT%"
@@ -137,7 +145,7 @@ if %FINDMOVIEIDCHOICE%==1 (
 	echo It should be in this format: m-%RANDOM%
 	echo:
 	set /p MOVIEID= Movie ID: 
-) else if %FINDMOVIEIDCHOICE%==4 (
+) else if "%FINDMOVIEIDCHOICE%"=="4" (
 	echo:
 	echo Opening the video list in the included Basilisk...
 	start basilisk\Basilisk-Portable\Basilisk-Portable.exe http://localhost:%PORT%
@@ -146,7 +154,7 @@ if %FINDMOVIEIDCHOICE%==1 (
 	echo It should be in this format: m-%RANDOM%
 	echo:
 	set /p MOVIEID= Movie ID: 
-) else if %FINDMOVIEIDCHOICE%==5 (
+) else if "%FINDMOVIEIDCHOICE%"=="5" (
 	echo:
 	echo Please enter your movie ID.
 	echo It should be in this format: m-%RANDOM%
@@ -168,7 +176,7 @@ set /p CONTFAILRENDER= Response:
 echo:
 cls
 
-if %CONTFAILRENDER%==1 (
+if "%CONTFAILRENDER%"=="1" (
 	if not exist "%FFMPEGINPUT%" (
 		if not exist "%TEMPPATH%" (
 			goto error2
@@ -217,10 +225,12 @@ echo:
 :iswidereask
 set ISWIDEPROMPT=0
 set /p ISWIDEPROMPT= Is Wide?:
-if %ISWIDEPROMPT%==1 (
+if "%ISWIDEPROMPT%"=="1" (
 	set WIDTH=1920
-) else if %ISWIDEPROMPT%==2 (
+	set HEIGHT=1080
+) else if "%ISWIDEPROMPT%"=="2" (
 	set WIDTH=1680
+	set HEIGHT=1080
 ) else (
 	echo You must choose a valid option.
 	echo:
@@ -237,10 +247,10 @@ echo:
 set WHICHSTEP=""
 set /p WHICHSTEP= Option: 
 echo:
-if %WHICHSTEP%==1 (
-	taskkill /im avidemux.exe >nul 2>&1
+if "%WHICHSTEP%"=="1" (
+	taskkill /f /im avidemux.exe >nul 2>&1
 	goto render_step2
-) else if %WHICHSTEP%==2 (
+) else if "%WHICHSTEP%"=="2" (
 	goto render_step3
 ) else (
 	echo You must choose a valid option.
@@ -261,24 +271,24 @@ echo Which browser do you want to use for the process?
 echo:
 echo Press 1 for Basilisk
 echo Press 2 for Chromium
-echo Press 3 for your custom set browser
+echo Press 3 for your custom set browser ^(Must be specified in settings.bat^)
 echo Press 4 for your default browser
 :BrowserSelect
 set /p BROWSERCHOICE= Browser:
 echo:
-if %BROWSERCHOICE%==1 (
+if "%BROWSERCHOICE%"=="1" (
 	echo Opening your movie in Basilisk...
 	PING -n 2.5 127.0.0.1>nul
 	start basilisk\Basilisk-Portable\Basilisk-Portable.exe "http://localhost:%PORT%/recordWindow?movieId=%MOVIEID%&isWide=%ISWIDE%"
-) else if %BROWSERCHOICE%==2 (
+) else if "%BROWSERCHOICE%"=="2" (
 	echo Opening your movie in Chromium...
 	PING -n 2.5 127.0.0.1>nul
 	start ungoogled-chromium\chromium.exe --allow-outdated-plugins --app="http://localhost:%PORT%/recordWindow?movieId=%MOVIEID%&isWide=%ISWIDE%"
-) else if %BROWSERCHOICE%==3 (
+) else if "%BROWSERCHOICE%"=="3" (
 	echo Opening your movie in your custom set browser...
 	PING -n 2.5 127.0.0.1>nul
 	start %CUSTOMBROWSER% "http://localhost:%PORT%/recordWindow?movieId=%MOVIEID%&isWide=%ISWIDE%"
-) else if %BROWSERCHOICE%==4 (
+) else if "%BROWSERCHOICE%"=="4" (
 	echo Opening your movie in your default browser...
 	PING -n 2.5 127.0.0.1>nul
 	start "" "http://localhost:%PORT%/recordWindow?movieId=%MOVIEID%&isWide=%ISWIDE%"
@@ -289,7 +299,7 @@ if %BROWSERCHOICE%==1 (
 )
 
 echo:
-taskkill /im avidemux.exe >nul 2>&1
+taskkill /f /im avidemux.exe >nul 2>&1
 cls
 echo As you can see, the movie won't play right away. That's normal.
 echo:
@@ -350,15 +360,17 @@ echo:
 cls
 echo Is the video widescreen ^(16:9^) or standard ^(14:9^)?
 echo:
-echo Press 1 if it's widescreen. ^(1920x1080^)
-echo Press 2 if it's standard. ^(1680x1080^)
+echo Press 1 if it's widescreen.
+echo Press 2 if it's standard.
 echo:
 :VideoWideSelect
 set /p ISVIDEOWIDE= Which One?:
-if %ISVIDEOWIDE%==1 (
+if "%ISVIDEOWIDE%"=="1" (
 	set WIDTH=1920
-) else if %ISVIDEOWIDE%==2 (
+	set HEIGHT=1080
+) else if "%ISVIDEOWIDE%"=="2" (
 	set WIDTH=1680
+	set HEIGHT=1080
 ) else (
 	echo You must choose either widescreen or standard.
 	echo:
@@ -389,8 +401,8 @@ set /p OUTRO= Response:
 echo:
 cls
 
-if %OUTRO%==0 (
-goto output
+if "%OUTRO%"=="0" (
+goto resolution
 ) else (
 goto outrocheck
 
@@ -461,7 +473,7 @@ goto resetcustomoutro
 	set /p CUSTOMOUTROCHOICE= Response: 
 	echo:
 	cls
-	if %CUSTOMOUTROCHOICE%==1 (
+	if "%CUSTOMOUTROCHOICE%"=="1" (
 		echo Drag the path to your custom outro in here.
 		echo:
 		set /p CUSTOMOUTRO= Path: 
@@ -471,7 +483,11 @@ goto resetcustomoutro
 		ren Outro16by9.ts OriginalOutro16by9.ts
 		echo Encoding outro to compatible H.264/AAC .TS file with FFMPEG...
 		PING -n 1.5 127.0.0.1>nul
-		start ffmpeg\ffmpeg.exe -i "%CUSTOMOUTRO%" -vcodec h264 -acodec aac -y "%OUTRO169%"
+		if "%VERBOSEWRAPPER%"=="y" (
+			start ffmpeg\ffmpeg.exe -i "file:%CUSTOMOUTRO%" -vcodec h264 -acodec aac -crf 17 -y "%OUTRO169%">nul
+		) else (
+			start ffmpeg\ffmpeg.exe -i "file:%CUSTOMOUTRO%" -vcodec h264 -acodec aac -crf 17 -y "%OUTRO169%"
+		)
 		echo Custom outro successfully encoded and added^!
 		echo:
 		pause
@@ -482,7 +498,7 @@ goto resetcustomoutro
 		
 	:videofilter
 	if %DEVMODE%==n (
-	goto output
+	goto resolution
 	) else (
 	goto vf
 	)
@@ -497,9 +513,9 @@ goto resetcustomoutro
 	echo:
 	set /p VFRESPONSE= Response: 
 	echo:
-	if %VFRESPONSE%==1 (
+	if "%VFRESPONSE%"=="1" (
 		goto avfilters
-		) else goto output (
+		) else goto resolution (
 		)
 		
 		:avfilters
@@ -509,7 +525,7 @@ goto resetcustomoutro
 		set /p AVFILTERLIST= Response:
 		echo:
 		cls
-		if %AVFILTERLIST%==1 (
+		if "%AVFILTERLIST%"=="1" (
 		goto filterlist
 		) else goto filterargs (
 		)
@@ -532,7 +548,105 @@ goto resetcustomoutro
 		cls
 	)
 	
+:resolution
+cls
+echo What resolution would you like your video to be in?
+echo:
+if "%ISVIDEOWIDE%"=="1" (
+	echo ^(1^) 240p ^(426x240^)
+	echo ^(2^) 360p ^(640x360^)
+	echo ^(3^) 480p ^(854x480^)
+	echo ^(4^) 720p ^(1280x720^)
+	echo ^(5^) 1080p ^(1920x1080^) ^(Default^)
+) else (
+	echo ^(1^) 240p ^(373x240^)
+	echo ^(2^) 360p ^(560x360^)
+	echo ^(3^) 480p ^(747x480^)
+	echo ^(4^) 720p ^(1120x720^)
+	echo ^(5^) 1080p ^(1680x1080^) ^(Default^)
+)
+echo:
+:resolutionretry
+set /p RESOLUTIONOPTION= Option: 
+if "%ISVIDEOWIDE%"=="1" (
+	if "%RESOLUTIONOPTION%"=="1" ( set WIDTH=426 & set HEIGHT=240 & goto format )
+	if "%RESOLUTIONOPTION%"=="2" ( set WIDTH=640 & set HEIGHT=360 & goto format )
+	if "%RESOLUTIONOPTION%"=="3" ( set WIDTH=854 & set HEIGHT=480 & goto format )
+	if "%RESOLUTIONOPTION%"=="4" ( set WIDTH=1280 & set HEIGHT=720 & goto format )
+	if "%RESOLUTIONOPTION%"=="5" ( set WIDTH=1920 & set HEIGHT=1080 & goto format )
+) else (
+	if "%RESOLUTIONOPTION%"=="1" ( set WIDTH=373 & set HEIGHT=240 & goto format )
+	if "%RESOLUTIONOPTION%"=="2" ( set WIDTH=560 & set HEIGHT=360 & goto format )
+	if "%RESOLUTIONOPTION%"=="3" ( set WIDTH=747 & set HEIGHT=480 & goto format )
+	if "%RESOLUTIONOPTION%"=="4" ( set WIDTH=1120 & set HEIGHT=720 & goto format )
+	if "%RESOLUTIONOPTION%"=="5" ( set WIDTH=1680 & set HEIGHT=1080 & goto format )
+)
+echo Invalid option. Please try again. && goto resolutionretry
+
+:format
+cls
+echo Which format would you like your video to be in?
+echo:
+echo ^(1^) MPEG-4 Video File ^(H.264/AAC^) ^(Default^)
+echo ^(2^) Audio/Video Interleave ^(x264/LAME^)
+echo ^(3^) WebM Video File ^(VPX9/Vorbis^)
+echo ^(4^) Windows Media Video ^(WMV2/WMAV2^)
+echo:
+:formatretry
+set /p FORMATTYPE= Option: 
+if "%FORMATTYPE%"=="1" (
+	set FILESUFFIX=mp4
+	set VCODEC=h264
+	set ACODEC=aac
+	set CRF=17
+	set ADDITIONAL=-crf "%CRF%"
+	goto outputcheck
+)
+if "%FORMATTYPE%"=="2" (
+	set FILESUFFIX=avi
+	set VCODEC=libx264
+	set ACODEC=libmp3lame
+	goto outputcheck
+)
+if "%FORMATTYPE%"=="3" (
+	set FILESUFFIX=webm
+	set VCODEC=libvpx
+	set ACODEC=libvorbis
+	goto outputcheck
+)
+if "%FORMATTYPE%"=="4" (
+	set FILESUFFIX=wmv
+	set VCODEC=wmv2
+	set ACODEC=wmav2
+	goto outputcheck
+)
+echo Invalid option. Please try again. && goto formatretry
+
+:outputcheck
+if "%DEVMODE%"=="y" (
+	if "%VCODEC%"=="h264" ( goto crfvalue )
+) else goto output
+
+:crfvalue
+if "%FILESUFFIX%"=="mp4" (
+set CRF=17
+echo ^(Developer mode-exclusive option^)
+echo:
+echo What quality ^(CRF^) do you want your video to be in?
+echo ^(0 is lossless, 17 is the default, 51 is lowest quality^)
+echo:
+echo ^(NOTE: ONLY enter a number between 0 and 51, otherwise it
+echo could screw up the entire exporting process for this session.
+echo If you wanna keep it at the default value of 17, you can just
+echo press Enter.^)
+echo:
+set /p CRF= CRF: 
+goto output
+) else goto output
+
 :output
+set ADDITIONAL=-crf "%CRF%"
+cls
 echo Where would you like to output to?
 echo Press Enter to output to the utilities\renders folder.
 echo:
@@ -542,72 +656,73 @@ set /p OUTPUT_PATH= Path:
 echo:
 echo What would you like your video file to be named?
 echo Press enter to make the filename %OUTPUT_FILE%.
-echo ^(.mp4 will be added automatically.^)
+echo ^(.%FILESUFFIX% will be added automatically.^)
 echo:
 set /p OUTPUT_FILENAME= Filename:
-set OUTPUT_FILE=%OUTPUT_FILENAME%.mp4
+set OUTPUT_FILE=%OUTPUT_FILENAME%.%FILESUFFIX%
 echo:
+taskkill /f /im avidemux.exe >nul 2>&1
 if not exist "renders" ( mkdir "renders" )
 goto render
 
 :render_yesoutro
-echo Because you chose to have an outro, this will
-echo require 4 different FFMPEG processes.
-echo:
-echo For the first one, it'll be encoding the
-echo input to a proper format.
-echo:
-pause
-echo:
+cls
 echo Starting ffmpeg...
-echo:
-call ffmpeg\ffmpeg.exe -i "%FFMPEGINPUT%" %WATERMARKARGS%-vf scale=%WIDTH%:1080%VF% -r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec h264 -acodec aac -y "%TEMPPATH%"
-echo:
-echo Now, it's time for the next FFMPEG process,
-echo which will encode it to TS, which is
-echo required so concat will work properly.
-echo:
-pause
-echo:
-echo Starting ffmpeg...
-echo:
-call ffmpeg\ffmpeg.exe -i "%TEMPPATH%" -c copy -y "%TEMPPATH2%"
-echo:
-echo Now, it's time for the next FFMPEG process,
-echo which will merge the outro video file and
-echo the video file together using the concat
-echo command.
-echo:
-echo Believe it or not, this isn't the final step.
-echo After this we'll convert the .TS to a .MP4.
-echo:
-pause
-:: This shit right here was where I began to have a really weird problem with the program working. ~xom
-echo:
-echo Starting ffmpeg...
-echo:
-if %ISVIDEOWIDE%==0 (
-	call ffmpeg\ffmpeg.exe -i "concat:%TEMPPATH2%|%OUTRO149%" -c copy -y "%TEMPPATH3%"
+PING -n 3 127.0.0.1>nul
+echo Going through process 1 of 4...
+if "%VERBOSEWRAPPER%"=="y" (
+	call ffmpeg\ffmpeg.exe -i "file:%FFMPEGINPUT%" -vf scale="%WIDTH%:%HEIGHT%" %VF%-r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec h264 -acodec aac -crf 17 -y "%TEMPPATH%" && echo Process completed. || echo Process failed. && set ERROR=y
 ) else (
-	call ffmpeg\ffmpeg.exe -i "concat:%TEMPPATH2%|%OUTRO169%" -c copy -y "%TEMPPATH3%"
+	call ffmpeg\ffmpeg.exe -i "file:%FFMPEGINPUT%" -vf scale="%WIDTH%:%HEIGHT%" %VF%-r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec h264 -acodec aac -crf 17 -y "%TEMPPATH%">nul && echo Process completed. || echo Process failed. && set ERROR=y
 )
-echo:
-echo Now, it's time for the final step.
-echo:
-echo This will convert the resulting .TS file
-echo into an H.264/AAC .MP4 file, which will make
-echo it compatible with most common video editors,
-echo especially VEGAS Pro.
-echo:
-pause
-echo:
-echo Starting ffmpeg...
-echo:
-call ffmpeg\ffmpeg.exe -i "%TEMPPATH3%" -vcodec h264 -acodec aac "%OUTPUT_PATH%\%OUTPUT_FILE%"
+
+if "%ERROR%"=="n" (
+	PING -n 2 127.0.0.1>nul
+	echo Going through process 2 of 4...
+	if "%VERBOSEWRAPPER%"=="y" (
+		call ffmpeg\ffmpeg.exe -i "file:%TEMPPATH%" -c copy -y "%TEMPPATH2%" && echo Process completed. || echo Process failed. && set ERROR=y
+	) else (
+		call ffmpeg\ffmpeg.exe -i "file:%TEMPPATH%" -c copy -y "%TEMPPATH2%">nul && echo Process completed. || echo Process failed. && set ERROR=y
+	)
+)
+
+if "%ERROR%"=="n" (
+	PING -n 2 127.0.0.1>nul
+	echo Going through process 3 of 4...
+	if exist "tmpconcat.txt" ( del tmpconcat.txt )
+	echo file '%TEMPPATH2%'>>tmpconcat.txt
+	if %ISVIDEOWIDE%==0 (
+		echo file '%OUTRO149%'>>tmpconcat.txt
+	) else (
+		echo file '%OUTRO169%'>>tmpconcat.txt
+	)
+	if "%VERBOSEWRAPPER%"=="y" (
+		call ffmpeg\ffmpeg.exe -f concat -safe 0 -i "file:%CD%\tmpconcat.txt" -codec copy -y "%TEMPPATH3%" && echo Process completed. || echo Process failed. && set ERROR=y
+	) else (
+		call ffmpeg\ffmpeg.exe -f concat -safe 0 -i "file:%CD%\tmpconcat.txt" -codec copy -y "%TEMPPATH3%">nul && echo Process completed. || echo Process failed. && set ERROR=y
+	)
+)
+
+if "%ERROR%"=="n" (
+	PING -n 2 127.0.0.1>nul
+	del tmpconcat.txt>nul
+	echo Going through process 4 of 4...
+	if "%VERBOSEWRAPPER%"=="y" (
+		call ffmpeg\ffmpeg.exe -i "file:%TEMPPATH3%" -vcodec %VCODEC% -acodec %ACODEC% %ADDITIONAL% "%OUTPUT_PATH%\%OUTPUT_FILE%" && echo Process completed. || echo Process failed. && set ERROR=y
+	) else (
+		call ffmpeg\ffmpeg.exe -i "file:%TEMPPATH3%" -vcodec %VCODEC% -acodec %ACODEC% %ADDITIONAL% "%OUTPUT_PATH%\%OUTPUT_FILE%">nul && echo Process completed. || echo Process failed. && set ERROR=y
+	)
+)
 goto render_completed
 
 :render_nooutro
-call ffmpeg\ffmpeg.exe -i "%FFMPEGINPUT%" %WATERMARKARGS%-vf scale=%WIDTH%:1080%VF% -r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec h264 -acodec aac -y "%OUTPUT_PATH%\%OUTPUT_FILE%"
+echo Starting ffmpeg...
+echo Going through process 1 of 1...
+if "%VERBOSEWRAPPER%"=="y" (
+	call ffmpeg\ffmpeg.exe -i "file:%FFMPEGINPUT%" -vf scale="%WIDTH%:%HEIGHT%" %VF%-r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec %VCODEC% -acodec %ACODEC% %ADDITIONAL% -y "%OUTPUT_PATH%\%OUTPUT_FILE%" && echo Process completed. || echo Process failed. && set ERROR=y
+) else (
+	call ffmpeg\ffmpeg.exe -i "file:%FFMPEGINPUT%" -vf scale="%WIDTH%:%HEIGHT%" %VF%-r 25 -filter:a loudnorm,volume=%VOLUME% -vcodec %VCODEC% -acodec %ACODEC% %ADDITIONAL% -y "%OUTPUT_PATH%\%OUTPUT_FILE%">nul && echo Process completed. || echo Process failed. && set ERROR=y
+)
 goto render_completed
 
 :render
@@ -617,42 +732,73 @@ if %OUTRO%==1 (
 	goto render_nooutro
 )
 
-:render_completed
-echo:
-set WHATTODONEXT=0
-echo The entire rendering process has been complete^!
-echo:
-echo Press 1 to open the rendered file
-echo Press 2 to go to the render output folder
-echo Press 3 to exit out of this window right away
-echo Press 4 to export another video
-echo:
-set /p WHATTODONEXT= Option:
-if %WHATTODONEXT%==1 (
-	start "%OUTPUT_PATH%\%OUTPUT_FILE%"
-	goto last_step
-) else if %WHATTODONEXT%==2 (
-	start explorer.exe /select,"%OUTPUT_PATH%\%OUTPUT_FILE%"
-	goto last_step
-) else if %WHATTODONEXT%==3 (
-	exit
-) else if %WHATTODONEXT%==4 (
-	set RESTARTVALUE=1
-cls
-goto restart
-)
 
-
-:last_step
-echo:
-set LAST=0
-echo Press 1 to export another video. Otherwise, press Enter to exit.
-set /p LAST= Choice:
-if %LAST%==1 (
-	cls
-	set RESTARTVALUE=1
-	goto restart
-	) else (
-	taskkill /im avidemux.exe >nul 2>&1
-	exit
+if "%ERROR%"=="n" (
+	echo Deleting any temporary files...
+	set MISCTEMP=%CD%\misc\temp\*
+	for %%i in (%TEMPPATH%,%TEMPPATH2%,%TEMPPATH3%,%MISCTEMP%) do (
+		if exist "%%i" ( del "%%i" )
 	)
+	echo:
+)
+:render_completed
+if "%VERBOSEWRAPPER%"=="n" ( cls )
+if "%ERROR%"=="n" (
+	set WHATTODONEXT=""
+	echo The entire rendering process has been complete^^!
+	echo:
+	echo Press 1 to open the rendered file
+	echo Press 2 to go to the render output folder
+	echo Press 3 to exit out of this window
+	echo Press 4 to export another video
+	echo:
+	:final_choice
+	set /p WHATTODONEXT= Option:
+	if "!whattodonext!"=="1" (
+		start "" "%OUTPUT_PATH%\%OUTPUT_FILE%"
+		echo:
+		goto final_choice
+	)
+	if "!whattodonext!"=="2" (
+		start explorer.exe /select,"%OUTPUT_PATH%\%OUTPUT_FILE%"
+		echo:
+		goto final_choice
+	)
+	if "!whattodonext!"=="3" exit
+	if "!whattodonext!"=="4" (
+		set RESTARTVALUE=1
+		cls
+		goto restart
+	)
+	echo:
+	goto final_choice
+) else (
+	set PROCESSFAILCH=""
+	echo ERROR: One or more of the FFMPEG processes failed!
+	echo:
+	echo For this reason, Wrapper: Offline did NOT remove any
+	echo of the temporary files this time.
+	echo:
+	echo Press 1 to try again
+	echo Press 2 to restart the UI
+	echo Press 3 to restart the actual window
+	echo Press 4 to exit out of this window
+	echo:
+	:processfailchoice
+	set ERROR=n
+	set /p PROCESSFAILCH= Option: 
+	if "!processfailch!"=="1" (
+	set ERROR=n
+	goto render
+	)
+	if "!processfailch!"=="2" (
+		set RESTARTVALUE=1
+		cls
+		goto restart
+	)
+	if "!processfailch!"=="3" ( start "" %0 & exit )
+	if "!processfailch!"=="4" exit
+	echo Time to choose.
+	echo:
+	goto processfailchoice
+)

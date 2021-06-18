@@ -6,13 +6,17 @@ wrapper/_THEMES/import.xml
 wrapper/main.js
 wrapper/main-rpc.js
 wrapper/main-norpc.js
+wrapper/static/info-*.json
 !_*/_NO_REMÖVE
 utilities/backups/*
-utilities/import_these/*
+utilities/legacy/import_these/*
 utilities/renders/*
 utilities/misc/temp/*
 utilities/grounded_messages/*
-utilities/decrypted_assets/*
+utilities/sourcecode/AssetImporter/bin/*
+utilities/sourcecode/AssetImporter/obj/*
+utilities/sourcecode/AssetImporter/Properties/*
+utilities/sourcecode/AssetImporter/.vs/*
 utilities/config.bat
 utilities/checks/disclaimer.txt
 server/characters/*
@@ -152,3 +156,14 @@ dist
 # VEGAS audio waveform peak files
 *.sfk
 *.sfap0
+wrapper/_THEMES/_themelist-allthemes.xml
+wrapper/_THEMES/_themelist-lessthemes.xml
+wrapper/_THEMES/_themelist.xml
+wrapper/static/info-nowatermark.json
+wrapper/static/info-nowave.json
+wrapper/static/info-watermark.json
+wrapper/static/info-wave.json
+wrapper/static/page-debug.js
+wrapper/static/page-nodebug.js
+wrapper/static/page.js
+wrapper/static/watermarkON.txt

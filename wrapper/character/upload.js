@@ -11,7 +11,11 @@ module.exports = function (req, res, url) {
 		parse.unpackCharXml(buffer, numId);
 		fs.unlinkSync(path);
 		res.statusCode = 302;
-		const url = `/cc?themeId=family&original_asset_id=c-${numId}`
+		const xml = Buffer.from(buffer);
+		const tIDbeg = xml.indexOf('" theme_id="') + 12;
+		const tIDend = xml.indexOf('" x="');
+		const themeId = xml.subarray(tIDbeg, tIDend).toString();
+		const url = `/cc?themeId=${themeId}&original_asset_id=c-${numId}`
 		res.setHeader('Location', url);
 		res.end();
 	});

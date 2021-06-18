@@ -122,7 +122,7 @@ if !SKIPCHECKDEPENDS!==n (
 	echo ^(4^) Checking dependencies is[91m OFF [0m
 )
 :: Waveforms
-if exist "wrapper\static\info-nowave.json" (
+if exist "wrapper\static\info-nowave*.json" (
 	echo ^(5^) Waveforms are[92m ON [0m
 ) else ( 
 	echo ^(5^) Waveforms are[91m OFF [0m
@@ -157,7 +157,7 @@ if exist "wrapper\pages\html\_OLDLISTVIEW.txt" (
 	echo ^(9^) View on the video list is set to[91m Classic List [0m
 )
 :: Watermark
-if exist "wrapper\static\info-nowatermark.json" (
+if exist "wrapper\static\info-*nowatermark*.json" (
 	echo ^(10^) Wrapper: Offline watermark is[92m ON [0m
 ) else ( 
 	echo ^(10^) Wrapper: Offline watermark is[91m OFF [0m
@@ -189,9 +189,15 @@ if !DEVMODE!==y (
 ) else ( 
 	echo ^(14^) Developer mode is[91m OFF [0m
 )
+:: Auto restarting NPM
+if !AUTONODE!==y (
+	echo ^(15^) Auto-restarting NPM is[92m ON [0m
+) else ( 
+	echo ^(15^) Auto-restarting NPM is[91m OFF [0m
+)
 :: Character solid archive
 if exist "server\characters\characters.zip" (
-    echo ^(15^) Original LVM character IDs are[91m OFF [0m
+    echo ^(16^) Original LVM character IDs are[91m OFF [0m
 )
 
 if !DEVMODE!==y (
@@ -459,10 +465,30 @@ if "!choice!"=="?14" (
 	echo The developer settings will be visible both in these settings and in the Wrapper launcher.
 	goto reaskoptionscreen
 )
+:: Auto restarting NPM
+if "!choice!"=="15" (
+	set TOTOGGLE=AUTONODE
+	if !AUTONODE!==n (
+		set TOGGLETO=y
+	) else (
+		set TOGGLETO=n
+	)
+	set CFGLINE=48
+	goto toggleoption
+)
+
+if "!choice!"=="?15" (
+	echo By default, when the NPM crashes, an error message appears in the 
+	echo NPM window requiring a key input to restart it.
+        echo:
+	echo Enabling this feature skips the error message and pause completely,
+	echo restarting the NPM as soon as it crashes.
+	goto reaskoptionscreen
+)
 :: Character solid archive
 if exist "server\characters\characters.zip" (
-    if "!choice!"=="15" goto extractchars
-    if "!choice!"=="?15" (
+    if "!choice!"=="16" goto extractchars
+    if "!choice!"=="?16" (
         echo When first getting Wrapper: Offline, all non-stock characters are put into a single zip file.
         echo This is because if they're all separate, extracting takes forever and is incredibly annoying.
         echo If you wish to import characters made on the LVM when it was still up and hosted by Vyond,
@@ -870,6 +896,17 @@ if exist "_themelist-allthemes.xml" (
 	ren _themelist-lessthemes.xml _themelist.xml
 )
 popd
+pushd wrapper\pages\html
+if exist "create-allthemes.html" (
+	:: disable
+	ren create.html create-lessthemes.html
+	ren create-allthemes.html create.html
+) else ( 
+	:: enable
+	ren create.html create-allthemes.html
+	ren create-lessthemes.html create.html
+)
+popd
 goto optionscreen
 
 :::::::::::::::
@@ -878,25 +915,27 @@ goto optionscreen
 :waveformchange
 echo Toggling setting...
 pushd wrapper\static
-if exist "watermarkON.txt" (
-	if exist "info-nowave-watermark.json" (
-		:: disable (watermark)
-		ren info.json info-wave-watermark.json
-		ren info-nowave-watermark.json info.json
+if exist "info-nowave.json" (
+	:: disable
+	ren info.json info-wave.json
+	ren info-nowave.json info.json
+	if exist "info-watermark.json" (
+		ren info-watermark.json info-wave-watermark.json
+		ren info-nowave-watermark.json info-watermark.json
 	) else (
-		:: enable (watermark)
-		ren info.json info-wave.json
-		ren info-nowave.json info.json
+		ren info-nowatermark.json info-wave-nowatermark.json
+		ren info-nowave-nowatermark.json info-nowatermark.json
 	)
 ) else (
-	if exist "info-nowave.json" (
-		:: disable
-		ren info.json info-wave.json
-		ren info-nowave.json info.json
+	:: enable
+	ren info.json info-nowave.json
+	ren info-wave.json info.json
+	if exist "info-watermark.json" (
+		ren info-watermark.json info-nowave-watermark.json
+		ren info-wave-watermark.json info-watermark.json
 	) else (
-		:: enable
-		ren info.json info-nowave.json
-		ren info-wave.json info.json
+		ren info-nowatermark.json info-nowave-nowatermark.json
+		ren info-wave-nowatermark.json info-nowatermark.json
 	)
 )
 popd
@@ -1156,12 +1195,24 @@ if exist "info-nowatermark.json" (
 	:: disable
 	ren info.json info-watermark.json
 	ren info-nowatermark.json info.json
-	if exist "watermarkON.txt" ( del watermarkON.txt )
+	if exist "info-wave.json" (
+		ren info-wave.json info-wave-watermark.json
+		ren info-wave-nowatermark.json info-wave.json
+	) else (
+		ren info-nowave.json info-nowave-watermark.json
+		ren info-nowave-nowatermark.json info-nowave.json
+	)
 ) else ( 
 	:: enable
 	ren info.json info-nowatermark.json
 	ren info-watermark.json info.json
-	echo This .TXT file is required for incase you decide to disable waveforms but you want to keep the watermark.>watermarkON.txt
+	if exist "info-wave.json" (
+		ren info-wave.json info-wave-nowatermark.json
+		ren info-wave-watermark.json info-wave.json
+	) else (
+		ren info-nowave.json info-nowave-nowatermark.json
+		ren info-nowave-watermark.json info-nowave.json
+	)
 )
 popd
 goto optionscreen
@@ -1245,6 +1296,9 @@ echo set DEVMODE=n>> !cfg!
 echo:>> !cfg!
 echo :: Tells settings.bat which port the frontend is hosted on. ^(If changed manually, you MUST also change the value of "SERVER_PORT" to the same value in wrapper\env.json^) Default: 4343>> !cfg!
 echo set PORT=4343>> !cfg!
+echo:>> !cfg!
+echo :: Automatically restarts the NPM whenever it crashes. Default: y>> !cfg!
+echo set AUTONODE=y>> !cfg!
 echo:>> !cfg!
 cls
 %0
@@ -1353,7 +1407,6 @@ cls
 		)
 		if "!settingsres!"=="" ( echo You must select a valid option. && goto settinginexretry )
 	)
-
 
 :end
 endlocal

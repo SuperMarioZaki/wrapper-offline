@@ -54,7 +54,7 @@ Wrapper: Offline credits:
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Benson (D)                       | Wrapper: Offline                                                                                                                                     |
 | Poley Magik                      | CC Toon adventure, Expanded Color Palette, Head props and wearables and much more.                                                                   |
-| NathanTDA                        | Logo                                                                                                                                                 |
+| NathanSaturnBOI                  | Logo                                                                                                                                                 |
 | VisualPlugin (C)                 | Text to speech voices, background importing, tons of bug fixes and more                                                                              |
 | CLarramore (D) (B) 		   | Various bug fixes and development for some of the features                                                                                           |
 | **xomdjl_** (D)         	   | Lead developer for v1.3.0 and onward, export script, pick a theme page, implementing the Flashpoint version of Basilisk browser, TTS voices and more |       

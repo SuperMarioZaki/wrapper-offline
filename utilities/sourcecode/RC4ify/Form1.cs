@@ -47,23 +47,11 @@ namespace RC4ify
                     Globals.fileNameNoExt = Path.GetFileNameWithoutExtension(Globals.filePath);
                     textBox1.Text = Globals.filePath;
                     textBox2.Text = Globals.OGPATH + "\\" + Globals.fileNameNoExt + "_enc" + Globals.fileExt;
-                    string[] LicensedThemeIDs = { "akon", "bunny", "ben10", "chowder", "cctoonadventure", "domo", "toonadv", "monkeytalk", "sf", "startrek", "underdog", "willie" };
-                    if (Globals.OGPATH.Contains("store\\3a981f5cb2739137\\" + LicensedThemeIDs + "\\"))
+                    if (Globals.OGPATH.Contains("store\\3a981f5cb2739137\\"))
                     {
                         checkBox1.Checked = true;
                         textBox3.Visible = false;
                         comboBox1.Visible = true;
-                        comboBox1.Text = "g0o1a2n3i4m5a6t7e";
-                    }
-                    else
-                    {
-                        if (Globals.OGPATH.Contains("store\\3a981f5cb2739137\\"))
-                        {
-                            checkBox1.Checked = true;
-                            textBox3.Visible = false;
-                            comboBox1.Visible = true;
-                            comboBox1.Text = "sorrypleasetryagainlater";
-                        }
                     }
                 }
             }

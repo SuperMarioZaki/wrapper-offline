@@ -34,3 +34,4 @@ rpc.on("ready", () => {
 rpc.login({
 	clientId: "825080302178926633"
 });
+

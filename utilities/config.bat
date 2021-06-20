@@ -8,10 +8,10 @@ if "%SUBSCRIPT%"=="" ( start notepad.exe config.bat & exit )
 endlocal
 
 :: Shows exactly Offline is doing, and never clears the screen. Useful for development and troubleshooting. Default: n
-set VERBOSEWRAPPER=y
+set VERBOSEWRAPPER=n
 
 :: Won't check for dependencies (flash, node, etc) and goes straight to launching. Useful for speedy launching post-install. Default: n
-set SKIPCHECKDEPENDS=y
+set SKIPCHECKDEPENDS=n
 
 :: Won't install dependencies, regardless of check results. Overridden by SKIPCHECKDEPENDS. Mostly useless, why did I add this again? Default: n
 set SKIPDEPENDINSTALL=n
@@ -26,7 +26,7 @@ set APPCHROMIUM=y
 set CUSTOMBROWSER=n
 
 :: Lets the launcher know what browser framework is being used. Mostly used by the Flash installer. Accepts "chrome", "firefox", and "n". Default: n
-set BROWSER_TYPE=chrome
+set BROWSER_TYPE=n
 
 :: Runs through all of the scripts code, while never launching or installing anything. Useful for development. Default: n
 set DRYRUN=n

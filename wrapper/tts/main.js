@@ -119,7 +119,7 @@ module.exports = function (voiceName, text) {
 					download: true,
 					accept: "audio/mp3",
 				});
-				console.log(https.get({
+				https.get({
 					host: 'text-to-speech-demo.ng.bluemix.net',
 					path: `/api/v3/synthesize?${q}`,
 				}, r => {
@@ -127,7 +127,7 @@ module.exports = function (voiceName, text) {
 					r.on('data', d => buffers.push(d));
 					r.on('end', () => res(Buffer.concat(buffers)));
 					r.on('error', rej);
-				}));
+				});
 				break;
 			}
 			case "voiceforge": {

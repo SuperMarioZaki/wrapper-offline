@@ -753,9 +753,9 @@ if !INCLUDEDCHROMIUM!==n (
 	echo Opening Wrapper: Offline using included Chromium...
 	pushd utilities\ungoogled-chromium
 	if !APPCHROMIUM!==y (
-		if !DRYRUN!==n ( start chrome.exe --user-data-dir=the_profile --app=http://localhost:4343 )
+		if !DRYRUN!==n ( start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile --app=http://localhost:4343 )
 	) else (
-		if !DRYRUN!==n ( start chrome.exe --user-data-dir=the_profile http://localhost:4343 )
+		if !DRYRUN!==n ( start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile http://localhost:4343 )
 	)
 	popd
 )
@@ -838,9 +838,9 @@ if !INCLUDEDCHROMIUM!==n (
 	echo Opening Wrapper: Offline using included Chromium...
 	pushd utilities\ungoogled-chromium
 	if !APPCHROMIUM!==y (
-		start chrome.exe --user-data-dir=the_profile --app=http://localhost:4343 >nul
+		start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile --app=http://localhost:4343 >nul
 	) else (
-		start chrome.exe --user-data-dir=the_profile http://localhost:4343 >nul
+		start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile http://localhost:4343 >nul
 	)
 	popd
 )
@@ -859,9 +859,9 @@ if !INCLUDEDCHROMIUM!==n (
 	echo Opening the server page using included Chromium...
 	pushd utilities\ungoogled-chromium
 	if !APPCHROMIUM!==y (
-		start chrome.exe --user-data-dir=the_profile --app=https://localhost:4664 >nul
+		start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile --app=https://localhost:4664 >nul
 	) else (
-		start chrome.exe --user-data-dir=the_profile https://localhost:4664 >nul
+		start chrome.exe --allow-outdated-plugins --user-data-dir=the_profile https://localhost:4664 >nul
 	)
 	popd
 )

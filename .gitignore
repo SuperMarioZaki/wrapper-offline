@@ -18,6 +18,7 @@ utilities/md5.txt
 utilities/convmd5.txt
 utilities/originalcfname.txt
 server/characters/*
+server/vo/*
 server/characters/characters.zip
 server/store/3a981f5cb2739137/import/*
 server/store/3a981f5cb2739137/cc_store/family/cc_theme.xml

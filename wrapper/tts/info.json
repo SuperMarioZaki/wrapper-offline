@@ -1,12 +1,5 @@
 ﻿{
 	"voices": {
-		"import": {
-			"country": "",
-			"language": "any",
-			"gender": "M",
-			"source": "import",
-			"desc": "Custom Voice Clip"
-		},
 		"heather2": {
 			"country": "US",
 			"language": "en",
@@ -4333,7 +4326,6 @@
 		"ko": "Korean",
 		"pl": "Polish",
 		"nl": "Dutch",
-		"cy": "Welsh",
-		"any": "Any Language"
+		"cy": "Welsh"
 	}
 }

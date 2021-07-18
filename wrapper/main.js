@@ -32,6 +32,6 @@ rpc.on("ready", () => {
 });
 // Connects RPC to app
 rpc.login({
-	clientId: "825080302178926633"
+	clientId: "866340172874383370"
 });
 

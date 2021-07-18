@@ -81,6 +81,7 @@ There's likely not much way to solve this on your own. You should turn on VERBOS
 
 ### The editor/character creator won't load!
 The cause of this is usually an error with http-server, the software Offline uses to host the asset files. To see its output, turn on VERBOSEWRAPPER in settings.bat. If there's an error, then you might just have to ask for support in the Discord. If there's no error however, you might simply have to make your browser trust the HTTPS certificate. Normally this is automatically fixed by the launcher, but it may have broken, and Firefox users simply have to deal with this sadly. Because, as a Firefox user, Firefox has to be **special**. This is not a concern beyond annoyance, as you're just connecting to yourself and nobody else can connect. But if you see a notice like this on a real website, *that* is a cause for concern and you should avoid the website. To fix this, you can visit <https://localhost:4343> or open the server page with the launcher, and add a security exception.
+### It's Keep on saying "npm WARN discord-rpc@3.2.0 requires a peer of register-scheme@github:devsnek/node-register-scheme but none is installed. You must install peer dependencies yourself." No one has ever gotten that error Before. - ザキ
 
 
 
